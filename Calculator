@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>High Ticket Sales Earnings Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080808;
+    --surface: #111111;
+    --border: #1f1f1f;
+    --gold: #c9a84c;
+    --gold-light: #e8c96e;
+    --green: #22c55e;
+    --text: #e8e8e8;
+    --muted: #666;
+  }
+
+- { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+background: var(–bg);
+color: var(–text);
+font-family: ‘DM Sans’, sans-serif;
+min-height: 100vh;
+background-image: radial-gradient(ellipse at 20% 0%, #1a1200 0%, transparent 50%),
+radial-gradient(ellipse at 80% 100%, #0a1a00 0%, transparent 50%);
+}
+
+header {
+text-align: center;
+padding: 60px 20px 40px;
+border-bottom: 1px solid var(–border);
+}
+
+header .eyebrow {
+font-size: 11px;
+letter-spacing: 4px;
+text-transform: uppercase;
+color: var(–gold);
+margin-bottom: 12px;
+}
+
+header h1 {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: clamp(48px, 8vw, 96px);
+letter-spacing: 2px;
+line-height: 1;
+background: linear-gradient(135deg, #fff 0%, var(–gold-light) 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
+header p {
+color: var(–muted);
+font-size: 14px;
+margin-top: 16px;
+font-weight: 300;
+letter-spacing: 0.5px;
+}
+
+.container {
+max-width: 980px;
+margin: 0 auto;
+padding: 40px 20px 80px;
+}
+
+.grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 24px;
+}
+
+@media (max-width: 640px) {
+.grid { grid-template-columns: 1fr; }
+}
+
+.card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 12px;
+padding: 28px;
+}
+
+.card-title {
+font-size: 10px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–gold);
+margin-bottom: 24px;
+padding-bottom: 14px;
+border-bottom: 1px solid var(–border);
+}
+
+.field {
+margin-bottom: 20px;
+}
+
+.field label {
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 12px;
+color: var(–muted);
+margin-bottom: 10px;
+font-weight: 500;
+letter-spacing: 0.3px;
+}
+
+.field label span {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 18px;
+color: var(–gold-light);
+letter-spacing: 1px;
+}
+
+input[type=“range”] {
+-webkit-appearance: none;
+width: 100%;
+height: 3px;
+background: var(–border);
+border-radius: 2px;
+outline: none;
+cursor: pointer;
+}
+
+input[type=“range”]::-webkit-slider-thumb {
+-webkit-appearance: none;
+width: 18px;
+height: 18px;
+border-radius: 50%;
+background: var(–gold);
+cursor: pointer;
+box-shadow: 0 0 10px rgba(201,168,76,0.4);
+transition: box-shadow 0.2s;
+}
+
+input[type=“range”]::-webkit-slider-thumb:hover {
+box-shadow: 0 0 20px rgba(201,168,76,0.7);
+}
+
+input[type=“number”] {
+width: 100%;
+background: #0d0d0d;
+border: 1px solid var(–border);
+border-radius: 8px;
+color: var(–text);
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 22px;
+padding: 10px 14px;
+outline: none;
+letter-spacing: 1px;
+transition: border-color 0.2s;
+}
+
+input[type=“number”]:focus {
+border-color: var(–gold);
+}
+
+input[type=“number”]::-webkit-inner-spin-button,
+input[type=“number”]::-webkit-outer-spin-button { opacity: 0; }
+
+.results {
+margin-top: 24px;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 12px;
+overflow: hidden;
+}
+
+.results-header {
+background: linear-gradient(135deg, #1a1400 0%, #0d1a00 100%);
+padding: 20px 28px;
+border-bottom: 1px solid var(–border);
+font-size: 10px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–gold);
+}
+
+.results-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.result-item {
+padding: 28px;
+border-right: 1px solid var(–border);
+border-bottom: 1px solid var(–border);
+transition: background 0.2s;
+}
+
+.result-item:hover { background: #141414; }
+
+.result-label {
+font-size: 10px;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: var(–muted);
+margin-bottom: 10px;
+}
+
+.result-value {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 36px;
+letter-spacing: 1px;
+color: var(–text);
+line-height: 1;
+}
+
+.result-value.highlight {
+color: var(–green);
+font-size: 48px;
+}
+
+.result-sub {
+font-size: 11px;
+color: var(–muted);
+margin-top: 6px;
+}
+
+.pipeline {
+margin-top: 24px;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 12px;
+padding: 28px;
+}
+
+.pipeline-title {
+font-size: 10px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–gold);
+margin-bottom: 24px;
+padding-bottom: 14px;
+border-bottom: 1px solid var(–border);
+}
+
+.funnel {
+display: flex;
+gap: 4px;
+align-items: flex-end;
+height: 80px;
+margin-bottom: 16px;
+}
+
+.funnel-bar-wrap {
+flex: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 8px;
+height: 100%;
+justify-content: flex-end;
+}
+
+.funnel-bar {
+width: 100%;
+border-radius: 4px 4px 0 0;
+transition: height 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+min-height: 4px;
+background: var(–gold);
+opacity: 0.85;
+}
+
+.funnel-label {
+font-size: 10px;
+color: var(–muted);
+text-align: center;
+letter-spacing: 0.5px;
+}
+
+.funnel-num {
+font-family: ‘Bebas Neue’, sans-serif;
+font-size: 22px;
+color: var(–text);
+text-align: center;
+letter-spacing: 1px;
+}
+
+.annotation {
+font-size: 11px;
+color: var(–muted);
+text-align: center;
+margin-top: 8px;
+font-style: italic;
+}
+
+.section-divider {
+font-size: 10px;
+letter-spacing: 3px;
+text-transform: uppercase;
+color: var(–border);
+text-align: center;
+margin: 32px 0 24px;
+position: relative;
+}
+
+.section-divider::before,
+.section-divider::after {
+content: ‘’;
+position: absolute;
+top: 50%;
+width: 40%;
+height: 1px;
+background: var(–border);
+}
+.section-divider::before { left: 0; }
+.section-divider::after { right: 0; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Sales Opportunity Estimator</div>
+  <h1>Earnings Calculator</h1>
+  <p>Adjust the variables below to model your potential income as a high ticket closer</p>
+</header>
+
+<div class="container">
+
+  <div class="grid">
+
+```
+<!-- Availability -->
+<div class="card">
+  <div class="card-title">⏱ Availability & Calls</div>
+
+  <div class="field">
+    <label>Hours Available Per Week <span id="v-hours">38</span></label>
+    <input type="range" id="hours" min="5" max="60" value="38" oninput="update()">
+  </div>
+
+  <div class="field">
+    <label>Sales Call Length (hrs) <span id="v-call-len">1.0</span></label>
+    <input type="range" id="callLen" min="0.25" max="3" step="0.25" value="1" oninput="update()">
+  </div>
+
+  <div class="field">
+    <label>Calendar Utilisation Rate <span id="v-util">25%</span></label>
+    <input type="range" id="util" min="5" max="100" step="5" value="25" oninput="update()">
+  </div>
+
+</div>
+
+<!-- Conversion -->
+<div class="card">
+  <div class="card-title">📈 Conversion Rates</div>
+
+  <div class="field">
+    <label>Show Rate <span id="v-show">60%</span></label>
+    <input type="range" id="show" min="10" max="100" step="5" value="60" oninput="update()">
+  </div>
+
+  <div class="field">
+    <label>Close Rate <span id="v-close">35%</span></label>
+    <input type="range" id="close" min="5" max="100" step="5" value="35" oninput="update()">
+  </div>
+
+</div>
+
+<!-- Deal Value -->
+<div class="card">
+  <div class="card-title">💰 Deal Value</div>
+
+  <div class="field">
+    <label>Average Sales Price ($)</label>
+    <input type="number" id="price" value="10000" oninput="update()">
+  </div>
+
+  <div class="field">
+    <label>Average Cash Collected (%)</label>
+    <input type="number" id="cashPct" value="60" min="1" max="100" oninput="update()">
+  </div>
+
+</div>
+
+<!-- Commission -->
+<div class="card">
+  <div class="card-title">🏆 Commission</div>
+
+  <div class="field">
+    <label>Commission % <span id="v-comm">10%</span></label>
+    <input type="range" id="comm" min="1" max="30" value="10" oninput="update()">
+  </div>
+
+  <div class="field" style="margin-top:8px; padding:16px; background:#0d0d0d; border-radius:8px; border:1px solid var(--border)">
+    <div style="font-size:11px; color:var(--muted); margin-bottom:4px; letter-spacing:1px; text-transform:uppercase">Commission per close</div>
+    <div id="v-per-close" style="font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--gold-light); letter-spacing:1px">$0</div>
+  </div>
+
+</div>
+```
+
+  </div>
+
+  <!-- Pipeline Funnel -->
+
+  <div class="pipeline">
+    <div class="pipeline-title">📊 Weekly Pipeline Breakdown</div>
+    <div class="funnel">
+      <div class="funnel-bar-wrap">
+        <div class="funnel-num" id="f-booked">0</div>
+        <div class="funnel-bar" id="fb-booked" style="background:#c9a84c"></div>
+        <div class="funnel-label">Booked</div>
+      </div>
+      <div class="funnel-bar-wrap">
+        <div class="funnel-num" id="f-showed">0</div>
+        <div class="funnel-bar" id="fb-showed" style="background:#a87e2c"></div>
+        <div class="funnel-label">Showed</div>
+      </div>
+      <div class="funnel-bar-wrap">
+        <div class="funnel-num" id="f-closed">0</div>
+        <div class="funnel-bar" id="fb-closed" style="background:#22c55e"></div>
+        <div class="funnel-label">Closed</div>
+      </div>
+    </div>
+    <div class="annotation" id="funnel-note"></div>
+  </div>
+
+  <div class="section-divider">Projected Earnings</div>
+
+  <!-- Results -->
+
+  <div class="results">
+    <div class="results-header">💵 Income Projection</div>
+    <div class="results-grid">
+      <div class="result-item">
+        <div class="result-label">Weekly Sales</div>
+        <div class="result-value" id="r-weekly-sales">0</div>
+        <div class="result-sub">closes per week</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Weekly Earnings</div>
+        <div class="result-value" id="r-weekly-earn">$0</div>
+        <div class="result-sub">estimated commission</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Monthly Earnings</div>
+        <div class="result-value highlight" id="r-monthly-earn">$0</div>
+        <div class="result-sub">based on ~4.3 weeks</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Annual Earnings</div>
+        <div class="result-value" id="r-annual-earn">$0</div>
+        <div class="result-sub">projected yearly income</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function fmt(n) {
+  return '$' + Math.round(n).toLocaleString();
+}
+function fmtPct(n) { return n + '%'; }
+
+function update() {
+  const hours   = parseFloat(document.getElementById('hours').value);
+  const callLen = parseFloat(document.getElementById('callLen').value);
+  const util    = parseFloat(document.getElementById('util').value) / 100;
+  const show    = parseFloat(document.getElementById('show').value) / 100;
+  const close   = parseFloat(document.getElementById('close').value) / 100;
+  const price   = parseFloat(document.getElementById('price').value) || 0;
+  const cashPct = parseFloat(document.getElementById('cashPct').value) / 100;
+  const comm    = parseFloat(document.getElementById('comm').value) / 100;
+
+  // Update display labels
+  document.getElementById('v-hours').textContent = hours;
+  document.getElementById('v-call-len').textContent = callLen.toFixed(2);
+  document.getElementById('v-util').textContent = Math.round(util * 100) + '%';
+  document.getElementById('v-show').textContent = Math.round(show * 100) + '%';
+  document.getElementById('v-close').textContent = Math.round(close * 100) + '%';
+  document.getElementById('v-comm').textContent = Math.round(comm * 100) + '%';
+
+  // Core calculations
+  const availCalls = hours / callLen;
+  const bookedCalls = availCalls * util;
+  const showedCalls = bookedCalls * show;
+  const closedCalls = showedCalls * close;
+
+  const cashPerDeal = price * cashPct;
+  const commPerClose = cashPerDeal * comm;
+  const weeklyEarn = closedCalls * commPerClose;
+  const monthlyEarn = weeklyEarn * 4.33;
+  const annualEarn = weeklyEarn * 52;
+
+  document.getElementById('v-per-close').textContent = fmt(commPerClose);
+
+  // Funnel
+  document.getElementById('f-booked').textContent = bookedCalls.toFixed(1);
+  document.getElementById('f-showed').textContent = showedCalls.toFixed(1);
+  document.getElementById('f-closed').textContent = closedCalls.toFixed(1);
+
+  const maxVal = Math.max(bookedCalls, 1);
+  const barMax = 72;
+  document.getElementById('fb-booked').style.height = (bookedCalls / maxVal * barMax) + 'px';
+  document.getElementById('fb-showed').style.height = (showedCalls / maxVal * barMax) + 'px';
+  document.getElementById('fb-closed').style.height = (closedCalls / maxVal * barMax) + 'px';
+
+  document.getElementById('funnel-note').textContent =
+    `Of ${bookedCalls.toFixed(1)} calls booked, ${showedCalls.toFixed(1)} show up and ${closedCalls.toFixed(1)} close — per week`;
+
+  // Results
+  document.getElementById('r-weekly-sales').textContent = closedCalls.toFixed(1);
+  document.getElementById('r-weekly-earn').textContent = fmt(weeklyEarn);
+  document.getElementById('r-monthly-earn').textContent = fmt(monthlyEarn);
+  document.getElementById('r-annual-earn').textContent = fmt(annualEarn);
+}
+
+update();
+</script>
+
+</body>
+</html>
